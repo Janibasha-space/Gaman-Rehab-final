@@ -26,33 +26,147 @@
         margin: 10px auto;
     }
 
-    /* Ensure testimonial cards are properly contained */
+    /* Enhanced Testimonials for Mobile */
     .testimonial-carousel-container {
-        width: 600%;
+        width: 100% !important; /* Override the 600% width */
         overflow: hidden;
+        transition: none !important;
+        transform: none !important;
+    }
+    
+    .featured-testimonial {
+        position: relative;
+        overflow: hidden;
+        height: auto !important;
+        min-height: 450px;
+        max-width: 100% !important;
     }
     
     .testimonial-card {
+        width: 100% !important; /* Make each card take full width */
+        display: none; /* Hide all cards by default */
+        min-height: 420px;
+        height: auto !important;
+        padding: 25px !important;
+        box-sizing: border-box;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
-        height: auto;
-        min-height: 580px;
-        padding: 25px;
+        position: absolute !important;
+        left: 0;
+        right: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .testimonial-card.active {
+        display: block !important; /* Only show active card */
+        position: relative !important; /* Establish a stacking context */
+        opacity: 1;
+        visibility: visible;
+        z-index: 5;
+    }
+    
+    /* Ensure the featured testimonial container is positioned relative for navigation */
+    .featured-testimonial {
+        position: relative;
     }
     
     .testimonial-quote {
         max-height: none;
         overflow-y: visible;
         padding-right: 5px;
+        font-size: 15px !important;
+        line-height: 1.5 !important;
     }
     
     .testimonial-content {
-        height: auto;
+        height: auto !important;
     }
     
     .treatment-details {
         grid-template-columns: 1fr;
         gap: 10px;
+    }
+    
+    /* Enhanced Navigation Controls */
+    .testimonial-navigation {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        z-index: 10;
+    }
+    
+    .nav-arrow {
+        width: 40px;
+        height: 40px;
+        background: #FF7A00;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        z-index: 20;
+    }
+    
+    .prev-arrow {
+        left: 5px;
+        position: absolute;
+    }
+    
+    .next-arrow {
+        right: 5px;
+        position: absolute;
+    }
+    
+    .nav-arrow:hover, .nav-arrow:active {
+        transform: scale(1.1);
+        background: #E56600;
+    }
+    
+    .testimonial-dots {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .dot {
+        width: 10px;
+        height: 10px;
+        background: #ddd;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .dot.active {
+        background: #FF7A00;
+        transform: scale(1.2);
+    }
+    
+    /* Improve button visibility on various backgrounds */
+    .nav-arrow {
+        opacity: 0.9;
+        z-index: 30;
+    }
+    
+    .nav-arrow:hover {
+        opacity: 1;
+    }
+    
+    /* Position the dots below the card */
+    .testimonial-dots {
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+        gap: 8px;
+        padding: 0 50px;
     }
     
     /* Make sure gallery has proper positioning */
@@ -157,19 +271,74 @@
 /* Additional small phone fixes */
 @media (max-width: 480px) {
     .testimonial-card {
-        padding: 20px 15px;
+        padding: 20px !important;
+        min-height: 400px;
+        height: auto !important;
     }
     
     .google-badge {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
         gap: 10px;
+        margin-bottom: 15px;
     }
     
     .rating-circle {
         width: 50px;
         height: 50px;
         font-size: 20px;
+        min-width: 50px;
+    }
+    
+    /* Enhanced Navigation Controls for small devices */
+    .nav-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+        min-width: 36px;
+    }
+    
+    .testimonial-dots {
+        margin: 10px auto;
+    }
+    
+    /* Adjust testimonial content for small screens */
+    .testimonial-quote {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+    
+    .patient-name {
+        font-size: 16px;
+    }
+    
+    .treatment-tag {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+    
+    .detail-item {
+        padding: 10px;
+    }
+    
+    .detail-label {
+        font-size: 10px;
+    }
+    
+    .detail-value {
+        font-size: 12px;
+    }
+    
+    .patient-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .featured-testimonial {
+        min-height: 500px;
     }
     
     .gallery-nav {

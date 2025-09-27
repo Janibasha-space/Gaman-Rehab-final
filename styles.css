@@ -2715,17 +2715,18 @@ body {
         font-size: 16px;
     }
     
+    /* These styles will be overridden by mobile-fixes.css */
     .testimonial-card {
-        padding: 30px 25px;
-        min-height: 650px; /* Increased minimum height for mobile */
+        padding: 25px;
+        min-height: 450px;
     }
     
     .featured-testimonial {
-        min-height: 650px; /* Increased minimum height for mobile */
+        min-height: 500px;
     }
     
     .testimonial-carousel-container {
-        min-height: 650px; /* Increased minimum height for mobile */
+        min-height: 500px;
     }
     
     .treatment-details {
@@ -2752,8 +2753,10 @@ body {
         padding: 40px 0;
     }
     
+    /* These styles will be overridden by mobile-fixes.css */
     .testimonial-card {
-        padding: 25px 20px;
+        padding: 20px 15px;
+        min-height: 400px;
     }
     
     .metrics-grid {
@@ -2761,24 +2764,27 @@ body {
         gap: 15px;
     }
     
+    /* These will be overridden by the enhanced navigation styles in mobile-fixes.css */
     .testimonial-navigation {
         gap: 15px;
         margin-top: 30px;
+        position: relative;
+        z-index: 10;
     }
     
-    .testimonial-nav-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 18px;
+    .nav-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
     }
     
     .testimonial-dots {
         gap: 10px;
     }
     
-    .testimonial-dot {
-        width: 12px;
-        height: 12px;
+    .dot {
+        width: 10px;
+        height: 10px;
     }
 }
 

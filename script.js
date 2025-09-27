@@ -617,13 +617,21 @@ class TestimonialsNavigator {
         this.testimonialCards[this.currentSlide]?.classList.add('active');
         this.dots[this.currentSlide]?.classList.add('active');
 
+        // Check if we're on mobile (screen width <= 768px)
+        const isMobile = window.innerWidth <= 768;
+        
         // Move carousel container
         const carouselContainer = document.querySelector('.testimonial-carousel-container');
         if (carouselContainer) {
-            const translateX = -(slideIndex * (100 / 6)); // Each slide is 1/6 of container width
-            carouselContainer.style.transform = `translateX(${translateX}%)`;
-            
-            // No need to adjust height since we're using fixed heights now
+            if (isMobile) {
+                // Mobile approach: Don't use transform, rely on display:none/block instead
+                // We already handled this with the active class above
+                carouselContainer.style.transform = 'none'; // Ensure no transform is applied on mobile
+            } else {
+                // Desktop approach: use transform to slide
+                const translateX = -(slideIndex * (100 / 6)); // Each slide is 1/6 of container width
+                carouselContainer.style.transform = `translateX(${translateX}%)`;
+            }
         }
 
         // Restart auto-play
@@ -696,7 +704,16 @@ document.addEventListener('keydown', function(event) {
 
 // Initialize testimonials when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    new TestimonialsNavigator();
+    const testimonialsNavigator = new TestimonialsNavigator();
+    
+    // Add resize event listener to handle mobile/desktop transitions
+    window.addEventListener('resize', function() {
+        // Get the currently active slide
+        const currentSlide = testimonialsNavigator.currentSlide;
+        
+        // Re-apply the transform or display style based on new screen width
+        testimonialsNavigator.goToSlide(currentSlide);
+    });
 });
 
 // Video Play Functionality
@@ -755,6 +772,26 @@ function animateCounters() {
     const counters = document.querySelectorAll('.stat-item h3, .metric-number');
     
     counters.forEach(counter => {
+        // Special handling for rating number
+        if (counter.classList.contains('rating-number')) {
+            const ratingValue = parseFloat(counter.getAttribute('data-rating') || '4.9');
+            const duration = 2000;
+            const step = ratingValue / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= ratingValue) {
+                    current = ratingValue;
+                    counter.textContent = ratingValue.toFixed(1) + '/5';
+                    clearInterval(timer);
+                } else {
+                    counter.textContent = current.toFixed(1) + '/5';
+                }
+            }, 16);
+            return;
+        }
+        
         const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
         const duration = 2000;
         const step = target / (duration / 16);
@@ -773,8 +810,6 @@ function animateCounters() {
                 counter.textContent = Math.floor(current) + '%';
             } else if (originalText.includes('+')) {
                 counter.textContent = Math.floor(current) + '+';
-            } else if (originalText.includes('/')) {
-                counter.textContent = (current / 10).toFixed(1) + '/5';
             } else {
                 counter.textContent = Math.floor(current);
             }
