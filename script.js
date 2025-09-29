@@ -1,4 +1,50 @@
 // Mobile Navigation
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded - Setting up mobile navigation');
+    
+    // Mobile navigation toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (hamburger && navMenu) {
+        console.log('Hamburger and nav menu found - adding event listeners');
+        
+        hamburger.addEventListener('click', function(e) {
+            console.log('Hamburger clicked');
+            e.preventDefault();
+            e.stopPropagation();
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.classList.toggle('mobile-menu-open');
+        });
+        
+        // Close menu when clicking on links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.classList.remove('mobile-menu-open');
+            });
+        });
+    }
+    
+    // Ensure all Book Appointment buttons work correctly
+    const bookAppointmentBtns = document.querySelectorAll('.book-appointment, .mobile-book-btn');
+    bookAppointmentBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            openBookingModal();
+            
+            // If mobile menu is open, close it
+            if (hamburger && navMenu) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.classList.remove('mobile-menu-open');
+            }
+        });
+    });
+});
+
+// Mobile Navigation
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
@@ -15,6 +61,17 @@ if (hamburger && navMenu) {
         navMenu.classList.remove('active');
         document.body.classList.remove('mobile-menu-open');
     }));
+    
+    // Handle mobile book appointment button
+    const mobileBookBtn = document.querySelector('.mobile-book-btn');
+    if (mobileBookBtn) {
+        mobileBookBtn.addEventListener('click', () => {
+            openBookingModal();
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.classList.remove('mobile-menu-open');
+        });
+    }
 
     // Close mobile menu when clicking outside
     document.addEventListener('click', (e) => {
@@ -258,7 +315,7 @@ class FacilitiesGallery {
 document.addEventListener('DOMContentLoaded', function() {
     new FacilitiesGallery();
     
-    // Video play button functionality
+    // Video play button functionality for About video
     const videoPlayBtn = document.querySelector('.video-play-btn');
     const aboutVideo = document.getElementById('aboutVideo');
     
@@ -287,6 +344,45 @@ document.addEventListener('DOMContentLoaded', function() {
         
         aboutVideo.addEventListener('pause', function() {
             videoPlayBtn.style.display = 'flex';
+        });
+    }
+    
+    // Gallery video functionality
+    const galleryVideo = document.getElementById('galleryVideo');
+    const galleryPlayButton = document.getElementById('galleryPlayButton');
+    const galleryVideoOverlay = document.getElementById('galleryVideoOverlay');
+    
+    if (galleryVideo && galleryPlayButton && galleryVideoOverlay) {
+        // Play video when clicking the play button
+        galleryPlayButton.addEventListener('click', function() {
+            galleryVideo.play();
+            galleryVideoOverlay.style.opacity = '0';
+            galleryVideoOverlay.style.pointerEvents = 'none';
+        });
+        
+        // Handle video events
+        galleryVideo.addEventListener('play', function() {
+            galleryVideoOverlay.style.opacity = '0';
+            galleryVideoOverlay.style.pointerEvents = 'none';
+        });
+        
+        galleryVideo.addEventListener('pause', function() {
+            galleryVideoOverlay.style.opacity = '1';
+            galleryVideoOverlay.style.pointerEvents = 'auto';
+        });
+        
+        galleryVideo.addEventListener('ended', function() {
+            galleryVideoOverlay.style.opacity = '1';
+            galleryVideoOverlay.style.pointerEvents = 'auto';
+        });
+        
+        // Toggle play/pause when clicking on the video
+        galleryVideo.addEventListener('click', function() {
+            if (this.paused) {
+                this.play();
+            } else {
+                this.pause();
+            }
         });
     }
 });
@@ -521,11 +617,21 @@ class TestimonialsNavigator {
         this.testimonialCards[this.currentSlide]?.classList.add('active');
         this.dots[this.currentSlide]?.classList.add('active');
 
+        // Check if we're on mobile (screen width <= 768px)
+        const isMobile = window.innerWidth <= 768;
+        
         // Move carousel container
         const carouselContainer = document.querySelector('.testimonial-carousel-container');
         if (carouselContainer) {
-            const translateX = -(slideIndex * (100 / 6)); // Each slide is 1/6 of container width
-            carouselContainer.style.transform = `translateX(${translateX}%)`;
+            if (isMobile) {
+                // Mobile approach: Don't use transform, rely on display:none/block instead
+                // We already handled this with the active class above
+                carouselContainer.style.transform = 'none'; // Ensure no transform is applied on mobile
+            } else {
+                // Desktop approach: use transform to slide
+                const translateX = -(slideIndex * (100 / 6)); // Each slide is 1/6 of container width
+                carouselContainer.style.transform = `translateX(${translateX}%)`;
+            }
         }
 
         // Restart auto-play
@@ -598,7 +704,16 @@ document.addEventListener('keydown', function(event) {
 
 // Initialize testimonials when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    new TestimonialsNavigator();
+    const testimonialsNavigator = new TestimonialsNavigator();
+    
+    // Add resize event listener to handle mobile/desktop transitions
+    window.addEventListener('resize', function() {
+        // Get the currently active slide
+        const currentSlide = testimonialsNavigator.currentSlide;
+        
+        // Re-apply the transform or display style based on new screen width
+        testimonialsNavigator.goToSlide(currentSlide);
+    });
 });
 
 // Video Play Functionality
@@ -657,6 +772,26 @@ function animateCounters() {
     const counters = document.querySelectorAll('.stat-item h3, .metric-number');
     
     counters.forEach(counter => {
+        // Special handling for rating number
+        if (counter.classList.contains('rating-number')) {
+            const ratingValue = parseFloat(counter.getAttribute('data-rating') || '4.9');
+            const duration = 2000;
+            const step = ratingValue / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= ratingValue) {
+                    current = ratingValue;
+                    counter.textContent = ratingValue.toFixed(1) + '/5';
+                    clearInterval(timer);
+                } else {
+                    counter.textContent = current.toFixed(1) + '/5';
+                }
+            }, 16);
+            return;
+        }
+        
         const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
         const duration = 2000;
         const step = target / (duration / 16);
@@ -675,8 +810,6 @@ function animateCounters() {
                 counter.textContent = Math.floor(current) + '%';
             } else if (originalText.includes('+')) {
                 counter.textContent = Math.floor(current) + '+';
-            } else if (originalText.includes('/')) {
-                counter.textContent = (current / 10).toFixed(1) + '/5';
             } else {
                 counter.textContent = Math.floor(current);
             }
@@ -763,16 +896,18 @@ document.addEventListener('keydown', function(event) {
 });
 
 // Book Appointment Button Functionality
-const bookAppointmentBtns = document.querySelectorAll('.book-appointment-btn, .btn-primary');
+const bookAppointmentBtns = document.querySelectorAll('.header-book-btn, .mobile-book-btn, .book-appointment-btn, .btn-primary, .consultation-btn');
 
 bookAppointmentBtns.forEach(btn => {
     if (btn.textContent.includes('Book') || btn.textContent.includes('Consultation') || btn.textContent.includes('Journey')) {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            openAppointmentModal('book-appointment');
+            openBookingModal();
         });
     }
 });
+
+
 
 // Service Selection Enhancement
 const serviceCards = document.querySelectorAll('.service-card');
@@ -1233,3 +1368,82 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 console.log('Gaman Rehabilitation Center website loaded successfully!');
+
+// Global function for Learn More button (onclick fallback)
+function scrollToAbout() {
+    console.log('scrollToAbout function called');
+    const aboutSection = document.querySelector('#about');
+    if (aboutSection) {
+        console.log('Scrolling to About section...');
+        aboutSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+        
+        // Update active navigation link
+        const aboutNavLink = document.querySelector('a[href="#about"]');
+        if (aboutNavLink) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            aboutNavLink.classList.add('active');
+        }
+    } else {
+        console.error('About section not found!');
+    }
+}
+
+// Learn More Button Functionality - Final Implementation
+function initLearnMoreButton() {
+    const learnMoreBtn = document.getElementById('learnMoreBtn');
+    console.log('Initializing Learn More button:', learnMoreBtn);
+
+    if (learnMoreBtn) {
+        console.log('Learn More button found, adding event listener');
+        
+        // Remove any existing event listeners
+        const newBtn = learnMoreBtn.cloneNode(true);
+        learnMoreBtn.parentNode.replaceChild(newBtn, learnMoreBtn);
+        
+        newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Learn More button clicked - scrolling to About section');
+            
+            // Scroll to the About section
+            const aboutSection = document.querySelector('#about');
+            if (aboutSection) {
+                console.log('About section found, scrolling...');
+                aboutSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Also update the active navigation link
+                const aboutNavLink = document.querySelector('a[href="#about"]');
+                if (aboutNavLink) {
+                    // Remove active class from all nav links
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    // Add active class to about link
+                    aboutNavLink.classList.add('active');
+                }
+            } else {
+                console.error('About section not found!');
+            }
+        });
+        
+        console.log('✅ Learn More button event listener added successfully');
+    } else {
+        console.error('❌ Learn More button not found!');
+    }
+}
+
+// Initialize Learn More button when DOM is fully loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLearnMoreButton);
+} else {
+    // DOM is already loaded
+    initLearnMoreButton();
+}

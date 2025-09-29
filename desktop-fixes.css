@@ -1,0 +1,59 @@
+/* Desktop Fixes for Testimonials Navigation */
+
+/* Only apply these styles to non-mobile screens */
+@media (min-width: 769px) {
+    /* Position the arrows next to the testimonial cards */
+    .testimonial-navigation {
+        position: relative;
+        margin-bottom: 40px; /* Reduced from 80px */
+    }
+
+    /* Position the navigation arrows */
+    .prev-arrow, .next-arrow {
+        position: absolute;
+        top: -340px; /* Position vertically in the middle of the testimonial cards */
+        z-index: 10;
+    }
+
+    .prev-arrow {
+        left: calc(50% - 490px); /* Position to the left of the featured testimonial */
+    }
+
+    .next-arrow {
+        right: calc(50% - 490px); /* Position to the right of the featured testimonial */
+    }
+
+    /* Responsive adjustments for smaller desktop screens */
+    @media (max-width: 1000px) {
+        .prev-arrow {
+            left: calc(50% - 420px);
+        }
+        
+        .next-arrow {
+            right: calc(50% - 420px);
+        }
+    }
+
+    /* Even smaller screens but still desktop */
+    @media (max-width: 900px) {
+        .prev-arrow {
+            left: 10px;
+        }
+        
+        .next-arrow {
+            right: 10px;
+        }
+    }
+
+    /* Add some style improvements to make navigation more visible */
+    .nav-arrow {
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        border: 1px solid #f0f0f0;
+    }
+
+    /* Move the dots closer to the testimonial card */
+    .testimonial-dots {
+        margin-top: -10px; /* Bring the dots closer to the card */
+    }
+}

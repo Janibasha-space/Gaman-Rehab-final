@@ -12,8 +12,9 @@
     <link rel="stylesheet" href="contact-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Custom Inline Styles removed for cleaner implementation -->
+    <link rel="stylesheet" href="new-header.css">
+    <link rel="stylesheet" href="mobile-fixes.css">
+    <link rel="stylesheet" href="desktop-fixes.css">
     
     <!-- Firebase Module -->
     <script type="module" src="firebase.js"></script>
@@ -39,9 +40,12 @@
                 <li class="nav-item"><a href="#testimonials" class="nav-link">Testimonials</a></li>
                 <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
                 <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                <li class="nav-item mobile-only"><button class="mobile-book-btn" onclick="openBookingModal()">Book Appointment</button></li>
             </ul>
-            <button class="book-appointment-btn">Book Appointment</button>
-            <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+            <div class="book-btn-container">
+                <button class="book-appointment" onclick="openBookingModal()">Book Appointment</button>
+            </div>
+            <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" onclick="this.classList.toggle('active'); document.querySelector('.nav-menu').classList.toggle('active'); document.body.classList.toggle('mobile-menu-open');">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -81,7 +85,7 @@
                     </div>
                     <div class="hero-buttons">
                         <button class="btn-primary">Book Consultation</button>
-                        <button class="btn-secondary">Learn More</button>
+                        <button class="btn-secondary" id="learnMoreBtn" onclick="scrollToAbout()">Learn More</button>
                     </div>
                     <div class="hero-stats">
                         <div class="stat-item">
@@ -346,7 +350,7 @@
                 <p class="consultation-description">
                     Our healthcare professionals can help assess your needs and recommend the most appropriate treatment plan. Schedule a consultation today.
                 </p>
-                <button class="consultation-btn book-appointment-btn">Book a Consultation</button>
+                <button class="consultation-btn" onclick="openBookingModal()">Book a Consultation</button>
             </div>
         </div>
             </div>
@@ -697,7 +701,7 @@
                             <div class="metric-label">Lives Transformed</div>
                         </div>
                         <div class="metric-card">
-                            <div class="metric-number">4.9/5</div>
+                            <div class="metric-number rating-number" data-rating="4.9"/5</div>
                             <div class="metric-label">Average Rating</div>
                         </div>
                     </div>
@@ -810,11 +814,11 @@
                                 <img src="images/Gaman Hospital Beds.JPG" alt="Specialized Patient Rooms">
                             </div>
                             <div class="gallery-slide">
-                                <video src="images/Gallery Video1.mp4" muted controls alt="Medical Facility Tour">
+                                <video src="images/Gallery Video1.mp4" id="galleryVideo" muted controls alt="Medical Facility Tour">
                                     Your browser does not support the video tag.
                                 </video>
-                                <div class="video-overlay">
-                                    <div class="play-button">
+                                <div class="video-overlay" id="galleryVideoOverlay">
+                                    <div class="play-button" id="galleryPlayButton">
                                         <i class="fas fa-play"></i>
                                     </div>
                                 </div>
@@ -1146,9 +1150,9 @@
                 <div class="footer-section">
                     <h3>Contact Info</h3>
                     <div class="contact-info">
-                        <p><strong>Location:</strong> Gaman Rehabilitation Gachibowli</p>
-                        <p><strong>Phone:</strong> <a href="tel:+919666424207">+91 9666424207</a></p>
-                        <p><strong>Email:</strong> <a href="mailto:gamanphysiorehab@gmail.com">gamanphysiorehab@gmail.com</a></p>
+                        <p><strong>Location:</strong> <span class="brand-orange">Gaman Rehabilitation Center</span></p>
+                        <p><strong>WhatsApp:</strong> <a href="tel:+919666424207" class="whatsapp-footer">+91 9666424207</a></p>
+                        <p><strong>Email:</strong><br><a href="mailto:gamanphysiorehab@gmail.com">gamanphysiorehab@gmail.com</a></p>
                         <p><strong>Hours:</strong> 24/7</p>
                     </div>
                 </div>
@@ -1161,6 +1165,7 @@
     </footer>
 
     <!-- Backend service already loaded above -->
+    <link rel="stylesheet" href="mobile-fixes.css">
     <script src="script.js"></script>
     <script>
         // Make sure navbar stays fixed at the top
@@ -1173,6 +1178,26 @@
                     navbar.classList.remove('scrolled');
                 }
             });
+        });
+    </script>
+    <script>
+        // Direct fix for mobile menu
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ensure hamburger menu works correctly
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (hamburger && navMenu) {
+                console.log('Hamburger menu setup complete');
+                
+                // Add a backup click handler
+                hamburger.onclick = function(e) {
+                    console.log('Hamburger clicked (inline)');
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                    document.body.classList.toggle('mobile-menu-open');
+                };
+            }
         });
     </script>
 </body>
