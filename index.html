@@ -9,6 +9,23 @@
     })(window,document,'script','dataLayer','GTM-KW5PJ2TX');</script>
     <!-- End Google Tag Manager -->
     
+    <!-- Google Ads Conversion Tracking -->
+    <script>
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof(url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+          'send_to': 'AW-17793750344/2gqvCLf5js8bEMiq3KRC',
+          'event_callback': callback
+      });
+      return false;
+    }
+    </script>
+    <!-- End Google Ads Conversion Tracking -->
+    
     <!-- Google Search Console Verification -->
     <meta name="google-site-verification" content="ZfVRv1rGRUSEAKC3yrW1Bd0DNQKoqlKQd2P_nNZjk-U" />
     
