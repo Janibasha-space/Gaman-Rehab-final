@@ -1,5 +1,5 @@
 # robots.txt for Gaman Rehabilitation Center
-# https://gamanrehab.com/robots.txt
+# https://www.gamanrehab.com/robots.txt
 
 User-agent: *
 Allow: /
@@ -10,9 +10,11 @@ Disallow: /test-booking.html
 Disallow: /backend-connection.js
 Disallow: /test-backend.js
 Disallow: /firebase.js
+Disallow: /admin-filters.js
+Disallow: /admin-filters.css
 
 # Sitemap location
-Sitemap: https://gamanrehab.com/sitemap.xml
+Sitemap: https://www.gamanrehab.com/sitemap.xml
 
 # Crawl delay (optional - adjust as needed)
 Crawl-delay: 1

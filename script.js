@@ -1,15 +1,15 @@
 // Mobile Navigation
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM Content Loaded - Setting up mobile navigation');
-    
+
     // Mobile navigation toggle
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
-    
+
     if (hamburger && navMenu) {
         console.log('Hamburger and nav menu found - adding event listeners');
-        
-        hamburger.addEventListener('click', function(e) {
+
+        hamburger.addEventListener('click', function (e) {
             console.log('Hamburger clicked');
             e.preventDefault();
             e.stopPropagation();
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             navMenu.classList.toggle('active');
             document.body.classList.toggle('mobile-menu-open');
         });
-        
+
         // Close menu when clicking on links
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
@@ -27,13 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     // Ensure all Book Appointment buttons work correctly
     const bookAppointmentBtns = document.querySelectorAll('.book-appointment, .mobile-book-btn');
     bookAppointmentBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             openBookingModal();
-            
+
             // If mobile menu is open, close it
             if (hamburger && navMenu) {
                 hamburger.classList.remove('active');
@@ -61,7 +61,7 @@ if (hamburger && navMenu) {
         navMenu.classList.remove('active');
         document.body.classList.remove('mobile-menu-open');
     }));
-    
+
     // Handle mobile book appointment button
     const mobileBookBtn = document.querySelector('.mobile-book-btn');
     if (mobileBookBtn) {
@@ -89,12 +89,12 @@ const navLinks = document.querySelectorAll('.nav-link');
 
 function updateActiveNavLink() {
     const scrollPos = window.scrollY + 100;
-    
+
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.offsetHeight;
         const sectionId = section.getAttribute('id');
-        
+
         if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
             navLinks.forEach(link => {
                 link.classList.remove('active');
@@ -111,14 +111,14 @@ window.addEventListener('load', updateActiveNavLink);
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
-    link.addEventListener('click', function(e) {
+    link.addEventListener('click', function (e) {
         e.preventDefault();
         const targetId = this.getAttribute('href');
         const targetSection = document.querySelector(targetId);
-        
+
         if (targetSection) {
             const offsetTop = targetSection.offsetTop - 80; // Account for fixed navbar
-            
+
             window.scrollTo({
                 top: offsetTop,
                 behavior: 'smooth'
@@ -147,37 +147,37 @@ function showSlide(n) {
         }
     });
     dots.forEach(dot => dot.classList.remove('active'));
-    
+
     // Handle slide bounds
     if (n >= slides.length) currentSlide = 0;
     if (n < 0) currentSlide = slides.length - 1;
-    
+
     // Set previous slide
     const prevSlideIndex = currentSlide === 0 ? slides.length - 1 : currentSlide - 1;
     slides[prevSlideIndex].classList.add('prev');
-    
+
     // Activate current slide
     slides[currentSlide].classList.add('active');
     dots[currentSlide].classList.add('active');
-    
+
     // Handle video playback
     const currentSlideElement = slides[currentSlide];
     const video = currentSlideElement.querySelector('video');
-    
+
     if (video && currentSlideElement.dataset.type === 'video') {
         isVideoPlaying = true;
         video.play();
-        
+
         // Clear existing auto-slide interval
         clearInterval(autoSlideInterval);
-        
+
         // Wait for video to end, then resume auto-slide
         video.addEventListener('ended', () => {
             isVideoPlaying = false;
             startAutoSlide();
             setTimeout(nextSlide, 1000); // Wait 1 second after video ends
         }, { once: true });
-        
+
         // Fallback: if video is very long (more than 30 seconds), skip to next slide
         setTimeout(() => {
             if (isVideoPlaying && !video.paused) {
@@ -248,61 +248,61 @@ class FacilitiesGallery {
         this.prevBtn = document.querySelector('.prev-nav');
         this.nextBtn = document.querySelector('.next-nav');
         this.autoPlayInterval = null;
-        
+
         this.init();
     }
-    
+
     init() {
         if (!this.slides.length) return;
-        
+
         // Add event listeners
         this.prevBtn?.addEventListener('click', () => this.prevSlide());
         this.nextBtn?.addEventListener('click', () => this.nextSlide());
-        
+
         // Dot navigation
         this.dots.forEach((dot, index) => {
             dot.addEventListener('click', () => this.goToSlide(index));
         });
-        
+
         // Auto-play
         this.startAutoPlay();
-        
+
         // Pause on hover
         const gallery = document.querySelector('.facilities-gallery');
         gallery?.addEventListener('mouseenter', () => this.pauseAutoPlay());
         gallery?.addEventListener('mouseleave', () => this.startAutoPlay());
     }
-    
+
     goToSlide(index) {
         // Remove active classes
         this.slides[this.currentSlide]?.classList.remove('active');
         this.dots[this.currentSlide]?.classList.remove('active');
-        
+
         // Update current slide
         this.currentSlide = index;
-        
+
         // Add active classes
         this.slides[this.currentSlide]?.classList.add('active');
         this.dots[this.currentSlide]?.classList.add('active');
     }
-    
+
     nextSlide() {
         const nextIndex = (this.currentSlide + 1) % this.slides.length;
         this.goToSlide(nextIndex);
     }
-    
+
     prevSlide() {
         const prevIndex = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
         this.goToSlide(prevIndex);
     }
-    
+
     startAutoPlay() {
         this.pauseAutoPlay();
         this.autoPlayInterval = setInterval(() => {
             this.nextSlide();
         }, 4000);
     }
-    
+
     pauseAutoPlay() {
         if (this.autoPlayInterval) {
             clearInterval(this.autoPlayInterval);
@@ -312,72 +312,72 @@ class FacilitiesGallery {
 }
 
 // Initialize Facilities Gallery
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     new FacilitiesGallery();
-    
+
     // Video play button functionality for About video
     const videoPlayBtn = document.querySelector('.video-play-btn');
     const aboutVideo = document.getElementById('aboutVideo');
-    
+
     if (videoPlayBtn && aboutVideo) {
-        videoPlayBtn.addEventListener('click', function() {
+        videoPlayBtn.addEventListener('click', function () {
             if (aboutVideo.paused) {
                 aboutVideo.play();
                 this.style.display = 'none';
             }
         });
-        
-        aboutVideo.addEventListener('click', function() {
+
+        aboutVideo.addEventListener('click', function () {
             if (!this.paused) {
                 this.pause();
                 videoPlayBtn.style.display = 'flex';
             }
         });
-        
-        aboutVideo.addEventListener('ended', function() {
+
+        aboutVideo.addEventListener('ended', function () {
             videoPlayBtn.style.display = 'flex';
         });
-        
-        aboutVideo.addEventListener('play', function() {
+
+        aboutVideo.addEventListener('play', function () {
             videoPlayBtn.style.display = 'none';
         });
-        
-        aboutVideo.addEventListener('pause', function() {
+
+        aboutVideo.addEventListener('pause', function () {
             videoPlayBtn.style.display = 'flex';
         });
     }
-    
+
     // Gallery video functionality
     const galleryVideo = document.getElementById('galleryVideo');
     const galleryPlayButton = document.getElementById('galleryPlayButton');
     const galleryVideoOverlay = document.getElementById('galleryVideoOverlay');
-    
+
     if (galleryVideo && galleryPlayButton && galleryVideoOverlay) {
         // Play video when clicking the play button
-        galleryPlayButton.addEventListener('click', function() {
+        galleryPlayButton.addEventListener('click', function () {
             galleryVideo.play();
             galleryVideoOverlay.style.opacity = '0';
             galleryVideoOverlay.style.pointerEvents = 'none';
         });
-        
+
         // Handle video events
-        galleryVideo.addEventListener('play', function() {
+        galleryVideo.addEventListener('play', function () {
             galleryVideoOverlay.style.opacity = '0';
             galleryVideoOverlay.style.pointerEvents = 'none';
         });
-        
-        galleryVideo.addEventListener('pause', function() {
+
+        galleryVideo.addEventListener('pause', function () {
             galleryVideoOverlay.style.opacity = '1';
             galleryVideoOverlay.style.pointerEvents = 'auto';
         });
-        
-        galleryVideo.addEventListener('ended', function() {
+
+        galleryVideo.addEventListener('ended', function () {
             galleryVideoOverlay.style.opacity = '1';
             galleryVideoOverlay.style.pointerEvents = 'auto';
         });
-        
+
         // Toggle play/pause when clicking on the video
-        galleryVideo.addEventListener('click', function() {
+        galleryVideo.addEventListener('click', function () {
             if (this.paused) {
                 this.play();
             } else {
@@ -422,25 +422,25 @@ if (contactForm) {
         }
         return true;
     };
-    
-    contactForm.addEventListener('submit', async function(e) {
+
+    contactForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-        
+
         // Ensure backend service is ready
         ensureBackendService();
-        
+
         // Show loading state
         const submitBtn = this.querySelector('.contact-submit-btn');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
-        
+
         // Get form data
         const formData = new FormData(this);
         const data = Object.fromEntries(formData);
-        
+
         console.log('Form data collected:', data); // Debug log
-        
+
         // Basic validation
         if (!data.firstName || !data.lastName || !data.email || !data.phone || !data.service || !data.preferredDate) {
             alert('Please fill in all required fields.');
@@ -448,7 +448,7 @@ if (contactForm) {
             submitBtn.disabled = false;
             return;
         }
-        
+
         // Email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(data.email)) {
@@ -457,7 +457,7 @@ if (contactForm) {
             submitBtn.disabled = false;
             return;
         }
-        
+
         // Phone validation (basic)
         const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
         if (!phoneRegex.test(data.phone.replace(/[\s\-\(\)]/g, ''))) {
@@ -466,11 +466,11 @@ if (contactForm) {
             submitBtn.disabled = false;
             return;
         }
-        
+
         try {
             // Generate reference ID for tracking
             const referenceId = 'GRC' + Date.now().toString().slice(-6) + Math.random().toString(36).substring(2, 5).toUpperCase();
-            
+
             // Create WhatsApp message
             const message = `Hello Gaman Rehabilitation Center,
 
@@ -491,18 +491,18 @@ ${data.additionalNotes || 'None'}
 *Reference ID:* ${referenceId}
 
 Thank you!`;
-            
+
             // Open WhatsApp immediately
             const encodedMessage = encodeURIComponent(message);
             const whatsappURL = `https://wa.me/919666424207?text=${encodedMessage}`;
             window.open(whatsappURL, '_blank');
-            
+
             // Show success message
             alert('✅ Your inquiry has been submitted successfully! You will be redirected to WhatsApp to complete your appointment request.');
-            
+
             // Reset form
             this.reset();
-            
+
             // Try to save to Firebase in background (optional)
             try {
                 if (window.backendService && window.backendService.isInitialized) {
@@ -512,10 +512,10 @@ Thank you!`;
             } catch (bgError) {
                 console.log('ℹ️ Form sent to WhatsApp successfully, database save optional:', bgError);
             }
-            
+
         } catch (error) {
             console.error('Error processing form:', error);
-            
+
             // Even if there's an error, still try to send to WhatsApp
             try {
                 const referenceId = 'GRC' + Date.now().toString().slice(-6) + Math.random().toString(36).substring(2, 5).toUpperCase();
@@ -538,11 +538,11 @@ ${data.additionalNotes || 'None'}
 *Reference ID:* ${referenceId}
 
 Thank you!`;
-                
+
                 const encodedMessage = encodeURIComponent(message);
                 const whatsappURL = `https://wa.me/919666424207?text=${encodedMessage}`;
                 window.open(whatsappURL, '_blank');
-                
+
                 alert('✅ Your inquiry will be sent via WhatsApp!');
                 this.reset();
             } catch (whatsappError) {
@@ -619,7 +619,7 @@ class TestimonialsNavigator {
 
         // Check if we're on mobile (screen width <= 768px)
         const isMobile = window.innerWidth <= 768;
-        
+
         // Move carousel container
         const carouselContainer = document.querySelector('.testimonial-carousel-container');
         if (carouselContainer) {
@@ -688,7 +688,7 @@ function openBookingModal() {
 }
 
 // Close modal when clicking outside
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function (event) {
     const modal = document.getElementById('testimonialModal');
     if (event.target === modal) {
         closeTestimonialModal();
@@ -696,21 +696,21 @@ window.addEventListener('click', function(event) {
 });
 
 // Close modal with escape key
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') {
         closeTestimonialModal();
     }
 });
 
 // Initialize testimonials when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const testimonialsNavigator = new TestimonialsNavigator();
-    
+
     // Add resize event listener to handle mobile/desktop transitions
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         // Get the currently active slide
         const currentSlide = testimonialsNavigator.currentSlide;
-        
+
         // Re-apply the transform or display style based on new screen width
         testimonialsNavigator.goToSlide(currentSlide);
     });
@@ -727,12 +727,12 @@ if (playBtn && video) {
         videoOverlay.style.opacity = '0';
         videoOverlay.style.pointerEvents = 'none';
     });
-    
+
     video.addEventListener('pause', () => {
         videoOverlay.style.opacity = '1';
         videoOverlay.style.pointerEvents = 'auto';
     });
-    
+
     video.addEventListener('ended', () => {
         videoOverlay.style.opacity = '1';
         videoOverlay.style.pointerEvents = 'auto';
@@ -742,11 +742,11 @@ if (playBtn && video) {
 // Animate on Scroll
 function animateOnScroll() {
     const elements = document.querySelectorAll('.service-card, .team-card, .metric-card, .value-card, .stat-card');
-    
+
     elements.forEach(element => {
         const elementTop = element.getBoundingClientRect().top;
         const elementVisible = 150;
-        
+
         if (elementTop < window.innerHeight - elementVisible) {
             element.classList.add('animate');
         }
@@ -758,7 +758,7 @@ window.addEventListener('scroll', animateOnScroll);
 // Initialize animations on page load
 document.addEventListener('DOMContentLoaded', () => {
     animateOnScroll();
-    
+
     // Set minimum date for appointment booking to today
     const dateInput = document.getElementById('preferredDate');
     if (dateInput) {
@@ -770,7 +770,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Counter Animation for Statistics
 function animateCounters() {
     const counters = document.querySelectorAll('.stat-item h3, .metric-number');
-    
+
     counters.forEach(counter => {
         // Special handling for rating number
         if (counter.classList.contains('rating-number')) {
@@ -778,7 +778,7 @@ function animateCounters() {
             const duration = 2000;
             const step = ratingValue / (duration / 16);
             let current = 0;
-            
+
             const timer = setInterval(() => {
                 current += step;
                 if (current >= ratingValue) {
@@ -791,19 +791,19 @@ function animateCounters() {
             }, 16);
             return;
         }
-        
+
         const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
         const duration = 2000;
         const step = target / (duration / 16);
         let current = 0;
-        
+
         const timer = setInterval(() => {
             current += step;
             if (current >= target) {
                 current = target;
                 clearInterval(timer);
             }
-            
+
             // Format the number based on original text
             const originalText = counter.textContent;
             if (originalText.includes('%')) {
@@ -860,18 +860,18 @@ function switchTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.remove('active');
     });
-    
+
     // Remove active class from all tab buttons
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    
+
     // Show selected tab content
     const tabContent = document.getElementById(tabName);
     if (tabContent) {
         tabContent.classList.add('active');
     }
-    
+
     // Add active class to selected tab button
     const tabBtn = document.querySelector(`[data-tab="${tabName}"]`);
     if (tabBtn) {
@@ -880,7 +880,7 @@ function switchTab(tabName) {
 }
 
 // Close modal when clicking outside
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     const modal = document.getElementById('bookAppointmentModal');
     const modalContainer = document.querySelector('.modal-container');
     if (event.target === modal || (modal && modal.contains(event.target) && !modalContainer.contains(event.target))) {
@@ -889,7 +889,7 @@ document.addEventListener('click', function(event) {
 });
 
 // Close modal with escape key
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') {
         closeAppointmentModal();
     }
@@ -915,7 +915,7 @@ serviceCards.forEach(card => {
     card.addEventListener('click', () => {
         const serviceName = card.querySelector('h3').textContent;
         openAppointmentModal('book-appointment');
-        
+
         // Pre-select the service in the modal form
         setTimeout(() => {
             const serviceSelects = document.querySelectorAll('.appointment-form select');
@@ -935,21 +935,21 @@ serviceCards.forEach(card => {
 });
 
 // Video Controls
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const heroVideo = document.getElementById('heroVideo');
     const muteToggle = document.getElementById('muteToggle');
     const playPauseBtn = document.getElementById('playPauseBtn');
-    
+
     // Handle autoplay error - suppress the error message
     if (heroVideo) {
         heroVideo.play().catch(error => {
             console.log('Video autoplay was prevented, user interaction required:', error.name);
         });
     }
-    
+
     if (heroVideo && muteToggle) {
         // Mute/Unmute functionality
-        muteToggle.addEventListener('click', function() {
+        muteToggle.addEventListener('click', function () {
             if (heroVideo.muted) {
                 heroVideo.muted = false;
                 muteToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
@@ -959,13 +959,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     if (heroVideo && playPauseBtn) {
         // Play/Pause functionality
-        playPauseBtn.addEventListener('click', function() {
+        playPauseBtn.addEventListener('click', function () {
             // Find the video data in viewport manager
             const videoData = window.videoViewportManager?.videos?.find(v => v.element === heroVideo);
-            
+
             if (heroVideo.paused) {
                 heroVideo.play().catch(error => {
                     // Suppress autoplay errors
@@ -987,20 +987,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-        
+
         // Update button state when video plays/pauses (including from other sources)
-        heroVideo.addEventListener('play', function() {
+        heroVideo.addEventListener('play', function () {
             playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             playPauseBtn.title = 'Pause video';
         });
-        
-        heroVideo.addEventListener('pause', function() {
+
+        heroVideo.addEventListener('pause', function () {
             playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             playPauseBtn.title = 'Play video';
         });
-        
+
         // Handle video ended event
-        heroVideo.addEventListener('ended', function() {
+        heroVideo.addEventListener('ended', function () {
             playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             playPauseBtn.title = 'Play video';
         });
@@ -1032,7 +1032,7 @@ const whatsappFloat = document.querySelector('.whatsapp-float a');
 if (whatsappFloat) {
     whatsappFloat.addEventListener('click', (e) => {
         e.preventDefault();
-        
+
         const message = `Hello Gaman Rehabilitation Center!
 
 I visited your website and would like to know more about your rehabilitation services.
@@ -1043,7 +1043,7 @@ Could you please provide me with more information about:
 - Consultation process
 
 Thank you!`;
-        
+
         const encodedMessage = encodeURIComponent(message);
         const whatsappURL = `https://wa.me/919666424207?text=${encodedMessage}`;
         window.open(whatsappURL, '_blank');
@@ -1053,39 +1053,39 @@ Thank you!`;
 // Appointment Modal Form Submission
 document.addEventListener('DOMContentLoaded', () => {
     const appointmentForms = document.querySelectorAll('.appointment-form');
-    
+
     appointmentForms.forEach(form => {
-        form.addEventListener('submit', async function(e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             // Show loading state
             const submitBtn = this.querySelector('.submit-btn');
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
-            
+
             const formData = new FormData(this);
             const data = {};
-            
+
             // Extract data from form using name attributes
             for (let [key, value] of formData.entries()) {
                 data[key] = value;
             }
-            
+
             // Get active tab to determine form type
             const activeTab = document.querySelector('.tab-btn.active').textContent;
-            
+
             try {
                 // Check if backend service is available
                 if (!window.backendService) {
                     throw new Error('Backend service not initialized. Please refresh the page and try again.');
                 }
-                
+
                 console.log('🔄 Submitting form data:', data);
                 console.log('📋 Active tab:', activeTab);
-                
+
                 let result;
-                
+
                 // Submit to appropriate backend endpoint based on form type
                 if (activeTab.includes('APPOINTMENT') || activeTab.includes('VISIT')) {
                     if (activeTab.includes('VISIT')) {
@@ -1135,11 +1135,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         formType: activeTab
                     });
                 }
-                
+
                 if (result.success) {
                     // Create WhatsApp message
                     let message = `Hello Gaman Rehabilitation Center,\n\nI would like to request: ${activeTab}\n\n`;
-                    
+
                     // Format data for WhatsApp message
                     if (data.name) message += `Name: ${data.name}\n`;
                     if (data.phone) message += `Phone: ${data.phone}\n`;
@@ -1155,18 +1155,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data.reason) message += `Reason: ${data.reason}\n`;
                     if (data.healthCondition) message += `Health Condition: ${data.healthCondition}\n`;
                     if (data.additionalNotes) message += `Additional Notes: ${data.additionalNotes}\n`;
-                    
+
                     message += `\n*Reference ID:* ${result.id}\n\nThank you!`;
-                    
+
                     // Open WhatsApp
                     const encodedMessage = encodeURIComponent(message);
                     const whatsappURL = `https://wa.me/919666424207?text=${encodedMessage}`;
                     window.open(whatsappURL, '_blank');
-                    
+
                     // Close modal and reset form
                     closeAppointmentModal();
                     this.reset();
-                    
+
                     // Show success message
                     alert('✅ Your request has been submitted successfully! You will be redirected to WhatsApp to complete your request.');
                 } else {
@@ -1187,11 +1187,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // Form Field Enhancements
 const formInputs = document.querySelectorAll('input, select, textarea');
 formInputs.forEach(input => {
-    input.addEventListener('focus', function() {
+    input.addEventListener('focus', function () {
         this.parentElement.classList.add('focused');
     });
-    
-    input.addEventListener('blur', function() {
+
+    input.addEventListener('blur', function () {
         if (!this.value) {
             this.parentElement.classList.remove('focused');
         }
@@ -1204,7 +1204,7 @@ function filterServices(searchTerm) {
     serviceCards.forEach(card => {
         const title = card.querySelector('h3').textContent.toLowerCase();
         const description = card.querySelector('p').textContent.toLowerCase();
-        
+
         if (title.includes(searchTerm.toLowerCase()) || description.includes(searchTerm.toLowerCase())) {
             card.style.display = 'block';
         } else {
@@ -1242,7 +1242,7 @@ window.removeEventListener('scroll', animateOnScroll);
 window.addEventListener('scroll', debouncedAnimateOnScroll);
 
 // Accessibility improvements
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     // Enable keyboard navigation for carousel
     if (e.key === 'ArrowLeft') {
         const activeElement = document.activeElement;
@@ -1277,7 +1277,7 @@ class VideoViewportManager {
     init() {
         // Find all videos in the page
         const videoElements = document.querySelectorAll('video');
-        
+
         videoElements.forEach(video => {
             this.videos.push({
                 element: video,
@@ -1292,7 +1292,7 @@ class VideoViewportManager {
             entries.forEach(entry => {
                 const video = entry.target;
                 const videoData = this.videos.find(v => v.element === video);
-                
+
                 if (entry.isIntersecting) {
                     // Video is visible - only play if it was playing before AND not manually paused
                     if (videoData && videoData.wasPlaying && video.paused && !videoData.manuallyPaused) {
@@ -1321,13 +1321,13 @@ class VideoViewportManager {
         // Listen for manual play/pause events
         this.videos.forEach(videoData => {
             const video = videoData.element;
-            
+
             video.addEventListener('play', (e) => {
                 videoData.wasPlaying = true;
                 // Reset manual pause flag when user plays the video
                 videoData.manuallyPaused = false;
             });
-            
+
             video.addEventListener('pause', (e) => {
                 videoData.wasPlaying = false;
                 // Check if this pause was triggered by user interaction
@@ -1347,14 +1347,14 @@ class VideoViewportManager {
             element: videoElement,
             wasPlaying: false
         };
-        
+
         this.videos.push(videoData);
         this.observer.observe(videoElement);
-        
+
         videoElement.addEventListener('play', () => {
             videoData.wasPlaying = true;
         });
-        
+
         videoElement.addEventListener('pause', () => {
             videoData.wasPlaying = false;
         });
@@ -1389,7 +1389,7 @@ function scrollToAbout() {
             behavior: 'smooth',
             block: 'start'
         });
-        
+
         // Update active navigation link
         const aboutNavLink = document.querySelector('a[href="#about"]');
         if (aboutNavLink) {
@@ -1410,16 +1410,16 @@ function initLearnMoreButton() {
 
     if (learnMoreBtn) {
         console.log('Learn More button found, adding event listener');
-        
+
         // Remove any existing event listeners
         const newBtn = learnMoreBtn.cloneNode(true);
         learnMoreBtn.parentNode.replaceChild(newBtn, learnMoreBtn);
-        
-        newBtn.addEventListener('click', function(e) {
+
+        newBtn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             console.log('Learn More button clicked - scrolling to About section');
-            
+
             // Scroll to the About section
             const aboutSection = document.querySelector('#about');
             if (aboutSection) {
@@ -1428,7 +1428,7 @@ function initLearnMoreButton() {
                     behavior: 'smooth',
                     block: 'start'
                 });
-                
+
                 // Also update the active navigation link
                 const aboutNavLink = document.querySelector('a[href="#about"]');
                 if (aboutNavLink) {
@@ -1443,7 +1443,7 @@ function initLearnMoreButton() {
                 console.error('About section not found!');
             }
         });
-        
+
         console.log('✅ Learn More button event listener added successfully');
     } else {
         console.error('❌ Learn More button not found!');
@@ -1456,4 +1456,32 @@ if (document.readyState === 'loading') {
 } else {
     // DOM is already loaded
     initLearnMoreButton();
+}
+
+// =========================================================
+// FAQ Accordion Toggle
+// =========================================================
+function toggleFAQ(btn) {
+    const faqItem = btn.parentElement;
+    const answer = faqItem.querySelector('.faq-answer');
+    const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+    // Close all other FAQ items first
+    document.querySelectorAll('.faq-item').forEach(function (item) {
+        const otherBtn = item.querySelector('.faq-question');
+        const otherAnswer = item.querySelector('.faq-answer');
+        if (otherBtn && otherBtn !== btn) {
+            otherBtn.setAttribute('aria-expanded', 'false');
+            otherAnswer.classList.remove('open');
+        }
+    });
+
+    // Toggle clicked item
+    if (isOpen) {
+        btn.setAttribute('aria-expanded', 'false');
+        answer.classList.remove('open');
+    } else {
+        btn.setAttribute('aria-expanded', 'true');
+        answer.classList.add('open');
+    }
 }
